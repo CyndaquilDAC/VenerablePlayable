@@ -1,0 +1,20 @@
+{
+	"songs": [
+		["Venerable", "baldi", [13, 169, 83]]
+	],
+
+	"weekCharacters": [
+		"",
+		"",
+		""
+	],
+	"weekBackground": "stage",
+
+	"storyName": "Playable Venerable",
+	"weekBefore": "venerable",
+	"weekName": "Playable Venerable",
+	"startUnlocked": true,
+
+	"hideStoryMode": false,
+	"hideFreeplay": false
+}
