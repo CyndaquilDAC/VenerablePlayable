@@ -54,6 +54,28 @@
 			"fps": 24,
 			"name": "idle",
 			"indices": []
+		},
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"loop": false,
+			"anim": "glance",
+			"fps": 24,
+			"name": "glance",
+			"indices": []
+		},
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"loop": false,
+			"anim": "melt",
+			"fps": 24,
+			"name": "melt",
+			"indices": []
 		}
 	],
 	"no_antialiasing": false,
