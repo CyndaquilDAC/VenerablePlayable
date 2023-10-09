@@ -88,7 +88,7 @@ class BaseStage extends FlxBasic
 
 	// Things to replace FlxGroup stuff and inject sprites directly into the state
 	function add(object:FlxBasic) game.add(object);
-	function remove(object:FlxBasic) game.remove(object);
+	function remove(object:FlxBasic, split:Bool = false) game.remove(object, split);
 	function insert(position:Int, object:FlxBasic) game.insert(position, object);
 	
 	public function addBehindGF(obj:FlxBasic) insert(members.indexOf(game.gfGroup), obj);

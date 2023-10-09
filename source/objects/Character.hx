@@ -14,7 +14,6 @@ import tjson.TJSON as Json;
 
 import backend.Song;
 import backend.Section;
-import states.stages.objects.TankmenBG;
 
 typedef CharacterFile = {
 	var animations:Array<AnimArray>;
@@ -73,6 +72,9 @@ class Character extends FlxSprite
 	public var noAntialiasing:Bool = false;
 	public var originalFlipX:Bool = false;
 	public var healthColorArray:Array<Int> = [255, 0, 0];
+
+	public var canDance:Bool = true;
+	public var canSing:Bool = true;
 
 	public static var DEFAULT_CHARACTER:String = 'bf'; //In case a character is missing, it will use BF on its place
 	public function new(x:Float, y:Float, ?character:String = 'bf', ?isPlayer:Bool = false)
@@ -205,14 +207,6 @@ class Character extends FlxSprite
 				}
 			}*/
 		}
-
-		switch(curCharacter)
-		{
-			case 'pico-speaker':
-				skipDance = true;
-				loadMappedAnims();
-				playAnim("shoot1");
-		}
 	}
 
 	override function update(elapsed:Float)
@@ -282,7 +276,7 @@ class Character extends FlxSprite
 	 */
 	public function dance()
 	{
-		if (!debugMode && !skipDance && !specialAnim)
+		if (!debugMode && !skipDance && !specialAnim && canDance)
 		{
 			if(danceIdle)
 			{
@@ -301,6 +295,14 @@ class Character extends FlxSprite
 
 	public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void
 	{
+		if(AnimName.startsWith("sing"))
+		{
+			if(!canSing)
+			{
+				return;
+			}
+		}
+
 		specialAnim = false;
 		animation.play(AnimName, Force, Reversed, Frame);
 
@@ -328,18 +330,6 @@ class Character extends FlxSprite
 				danced = !danced;
 			}
 		}
-	}
-	
-	function loadMappedAnims():Void
-	{
-		var noteData:Array<SwagSection> = Song.loadFromJson('picospeaker', Paths.formatToSongPath(PlayState.SONG.song)).notes;
-		for (section in noteData) {
-			for (songNotes in section.sectionNotes) {
-				animationNotes.push(songNotes);
-			}
-		}
-		TankmenBG.animationNotes = animationNotes;
-		animationNotes.sort(sortAnims);
 	}
 
 	function sortAnims(Obj1:Array<Dynamic>, Obj2:Array<Dynamic>):Int

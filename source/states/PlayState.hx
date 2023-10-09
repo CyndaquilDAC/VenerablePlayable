@@ -384,14 +384,7 @@ class PlayState extends MusicBeatState
 		switch (curStage)
 		{
 			case 'stage': new states.stages.StageWeek1(); //Week 1
-			case 'spooky': new states.stages.Spooky(); //Week 2
-			case 'philly': new states.stages.Philly(); //Week 3
-			case 'limo': new states.stages.Limo(); //Week 4
-			case 'mall': new states.stages.Mall(); //Week 5 - Cocoa, Eggnog
-			case 'mallEvil': new states.stages.MallEvil(); //Week 5 - Winter Horrorland
-			case 'school': new states.stages.School(); //Week 6 - Senpai, Roses
-			case 'schoolEvil': new states.stages.SchoolEvil(); //Week 6 - Thorns
-			case 'tank': new states.stages.Tank(); //Week 7 - Ugh, Guns, Stress
+			case 'venerable': new states.stages.Venerable(); //venerable
 		}
 
 		if(isPixelStage) {
@@ -1672,11 +1665,11 @@ class PlayState extends MusicBeatState
 				timeTxt.text = FlxStringUtil.formatTime(secondsTotal, false);
 		}
 
-		if (camZooming)
-		{
-			FlxG.camera.zoom = FlxMath.lerp(defaultCamZoom, FlxG.camera.zoom, FlxMath.bound(1 - (elapsed * 3.125 * camZoomingDecay * playbackRate), 0, 1));
-			camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, FlxMath.bound(1 - (elapsed * 3.125 * camZoomingDecay * playbackRate), 0, 1));
-		}
+		FlxG.camera.zoom = FlxMath.lerp(defaultCamZoom, FlxG.camera.zoom, FlxMath.bound(1 - (elapsed * 3.125 * camZoomingDecay * playbackRate), 0, 1));
+		camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, FlxMath.bound(1 - (elapsed * 3.125 * camZoomingDecay * playbackRate), 0, 1));
+
+		FlxG.camera.angle = FlxMath.lerp(0, FlxG.camera.angle, FlxMath.bound(1 - (elapsed * 3.125 * camZoomingDecay * playbackRate), 0, 1));
+		camHUD.angle = FlxMath.lerp(0, camHUD.angle, FlxMath.bound(1 - (elapsed * 3.125 * camZoomingDecay * playbackRate), 0, 1));
 
 		FlxG.watch.addQuick("secShit", curSection);
 		FlxG.watch.addQuick("beatShit", curBeat);
@@ -3051,6 +3044,10 @@ class PlayState extends MusicBeatState
 
 	var lastBeatHit:Int = -1;
 
+	var cuicaBop:Bool = false;
+
+	var cuicaBopSpace:Int = 1;
+
 	override function beatHit()
 	{
 		if(lastBeatHit >= curBeat) {
@@ -3073,6 +3070,74 @@ class PlayState extends MusicBeatState
 			boyfriend.dance();
 		if (curBeat % dad.danceEveryNumBeats == 0 && dad.animation.curAnim != null && !dad.animation.curAnim.name.startsWith('sing') && !dad.stunned)
 			dad.dance();
+
+		if(cuicaBop)
+		{
+			if(curBeat % (cuicaBopSpace * 2) == 0)
+			{
+				FlxG.camera.angle = 2.5;
+				camHUD.angle = 1;
+				FlxG.camera.zoom += 0.005;
+			}
+			else if(curBeat % (cuicaBopSpace) == 0)
+			{
+				FlxG.camera.angle = -2.5;
+				camHUD.angle = -1;
+				FlxG.camera.zoom += 0.005;
+			}
+		}
+
+		switch(curBeat)
+		{
+			case 4 | 5 | 6 | 7:
+				defaultCamZoom += 0.05;
+			case 8:
+				defaultCamZoom -= 0.2;
+				FlxG.camera.flash();
+			case 40 | 72:
+				cuicaBop = !cuicaBop;
+				FlxG.camera.flash();
+			case 88:
+				defaultCamZoom += 0.1;
+			case 104:
+				defaultCamZoom -= 0.15;
+				FlxG.camera.flash();
+			case 135:
+				defaultCamZoom += 0.15;
+			case 136 | 264:
+				defaultCamZoom -= 0.1;
+				if(curBeat != 264)
+				{
+					cuicaBop = !cuicaBop;
+				}
+				cuicaBopSpace = 2;
+				FlxG.camera.flash();
+			case 200 | 328:
+				cuicaBopSpace = 1;
+				FlxG.camera.flash();
+			case 263:
+				defaultCamZoom += 0.1;
+			case 340 | 343 | 372 | 375:
+				defaultCamZoom += 0.05;
+			case 344 | 376:
+				defaultCamZoom -= 0.1;
+			case 392:
+				defaultCamZoom += 0.1;
+				cuicaBop = !cuicaBop;
+				FlxG.camera.flash();
+			case 424:
+				defaultCamZoom -= 0.1;
+				dad.canDance = false;
+				dad.canSing = false;
+				dad.playAnim("glance", true);
+			case 439:
+				dad.playAnim("melt", true);
+			case 440:
+				//PRI PART
+				dad.canDance = true;
+				dad.canSing = true;
+				dad.dance();
+		}
 
 		super.beatHit();
 		lastBeatHit = curBeat;

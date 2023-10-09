@@ -39,7 +39,7 @@ class HScript extends SScript
 		if (file == null)
 			file = '';
 	
-		super(file, false, false);
+		super(file, false);
 		parentLua = parent;
 		if (parent != null)
 			origin = parent.scriptName;
@@ -225,8 +225,6 @@ class HScript extends SScript
 					FunkinLua.luaTrace(funk.hscript.origin + ":" + funk.lastCalledFunction + " - " + e, false, false, FlxColor.RED);
 				return null;
 			}
-			else if (funk.hscript.returnValue != null)
-				return funk.hscript.returnValue;
 			#else
 			FunkinLua.luaTrace("runHaxeCode: HScript isn't supported on this platform!", false, false, FlxColor.RED);
 			#end
