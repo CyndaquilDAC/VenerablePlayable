@@ -626,6 +626,10 @@ class PlayState extends MusicBeatState
 
 		cacheCountdown();
 		cachePopUpScore();
+
+		//PRELOAD CHARACTERS
+		addCharacterToList('principal', 1);
+		addCharacterToList('sweep', 1);
 		
 		for (key => type in precacheList)
 		{
@@ -3133,10 +3137,16 @@ class PlayState extends MusicBeatState
 			case 439:
 				dad.playAnim("melt", true);
 			case 440:
+				FlxG.camera.flash();
 				//PRI PART
 				dad.canDance = true;
 				dad.canSing = true;
 				dad.dance();
+				dadGroup.remove(dad);
+				dad = new Character(dad.x, dad.y, 'principal', false);
+				dadGroup.add(dad);
+				iconP2.changeIcon(dad.healthIcon);
+				reloadHealthBarColors();
 		}
 
 		super.beatHit();

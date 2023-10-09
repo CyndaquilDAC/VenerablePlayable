@@ -79,7 +79,7 @@ class Venerable extends BaseStage
 		// Code here
 		if(curBeat == 438 || curBeat == 439)
 		{
-			officeBg.angle += 10 * elapsed;
+			officeBg.angle += 20 * elapsed;
 		}
 	}
 
@@ -98,6 +98,10 @@ class Venerable extends BaseStage
 		{
 			remove(officeBg, true);
 			add(officeBg);
+			game.remove(game.dadGroup, true);
+			game.remove(game.boyfriendGroup, true);
+			game.add(game.dadGroup);
+			game.add(game.boyfriendGroup);
 			officeBg.scale.set(0.001, 0.001);
 			FlxTween.tween(officeBg, {"scale.x": 1.3, "scale.y": 1.3}, Conductor.crochet / 500, {ease: FlxEase.circIn});
 		}
