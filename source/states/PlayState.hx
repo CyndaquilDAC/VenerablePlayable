@@ -1610,6 +1610,12 @@ class PlayState extends MusicBeatState
 		setOnScripts('curDecStep', curDecStep);
 		setOnScripts('curDecBeat', curDecBeat);
 
+		if (SONG.notes[curSection] != null)
+		{
+			if (generatedMusic && !endingSong && !isCameraOnForcedPos)
+				moveCameraSection();
+		}
+
 		if(botplayTxt != null && botplayTxt.visible) {
 			botplaySine += 180 * elapsed;
 			botplayTxt.alpha = 1 - Math.sin((Math.PI * botplaySine) / 180);
@@ -1634,10 +1640,12 @@ class PlayState extends MusicBeatState
 		iconP2.scale.set(mult, mult);
 		iconP2.updateHitbox();
 
-		var iconOffset:Int = 26;
+		var iconOffset:Int = 13;
 		if (health > 2) health = 2;
-		iconP1.x = healthBar.barCenter + (150 * iconP1.scale.x - 150) / 2 - iconOffset;
-		iconP2.x = healthBar.barCenter - (150 * iconP2.scale.x) / 2 - iconOffset * 2;
+		iconP1.x = healthBar.barCenter + (75 * iconP1.scale.x - 75) / 2 - iconOffset;
+		iconP2.x = healthBar.barCenter - (75 * iconP2.scale.x) / 2 - iconOffset * 2;
+		iconP1.y = healthBar.y - 12.5;
+		iconP2.y = healthBar.y - 12.5;
 		iconP1.animation.curAnim.curFrame = (healthBar.percent < 20) ? 1 : 0;
 		iconP2.animation.curAnim.curFrame = (healthBar.percent > 80) ? 1 : 0;
 
@@ -2155,14 +2163,16 @@ class PlayState extends MusicBeatState
 			camFollow.setPosition(gf.getMidpoint().x, gf.getMidpoint().y);
 			camFollow.x += gf.cameraPosition[0] + girlfriendCameraOffset[0];
 			camFollow.y += gf.cameraPosition[1] + girlfriendCameraOffset[1];
+			camFollow.x += gf.curFunnyPosition[0];
+			camFollow.y += gf.curFunnyPosition[1];
 			tweenCamIn();
-			callOnScripts('onMoveCamera', ['gf']);
+			//callOnScripts('onMoveCamera', ['gf']);
 			return;
 		}
 
 		var isDad:Bool = (SONG.notes[sec].mustHitSection != true);
 		moveCamera(isDad);
-		callOnScripts('onMoveCamera', [isDad ? 'dad' : 'boyfriend']);
+		//callOnScripts('onMoveCamera', [isDad ? 'dad' : 'boyfriend']);
 	}
 
 	var cameraTwn:FlxTween;
@@ -2173,6 +2183,8 @@ class PlayState extends MusicBeatState
 			camFollow.setPosition(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
 			camFollow.x += dad.cameraPosition[0] + opponentCameraOffset[0];
 			camFollow.y += dad.cameraPosition[1] + opponentCameraOffset[1];
+			camFollow.x += dad.curFunnyPosition[0];
+			camFollow.y += dad.curFunnyPosition[1];
 			tweenCamIn();
 		}
 		else
@@ -2180,6 +2192,9 @@ class PlayState extends MusicBeatState
 			camFollow.setPosition(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100);
 			camFollow.x -= boyfriend.cameraPosition[0] - boyfriendCameraOffset[0];
 			camFollow.y += boyfriend.cameraPosition[1] + boyfriendCameraOffset[1];
+
+			camFollow.x += boyfriend.curFunnyPosition[0];
+			camFollow.y += boyfriend.curFunnyPosition[1];
 
 			if (Paths.formatToSongPath(SONG.song) == 'tutorial' && cameraTwn == null && FlxG.camera.zoom != 1)
 			{

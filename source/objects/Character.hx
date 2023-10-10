@@ -64,6 +64,8 @@ class Character extends FlxSprite
 	public var positionArray:Array<Float> = [0, 0];
 	public var cameraPosition:Array<Float> = [0, 0];
 
+	public var curFunnyPosition:Array<Float> = [0, 0];
+
 	public var hasMissAnimations:Bool = false;
 
 	//Used on Character Editor
@@ -297,8 +299,44 @@ class Character extends FlxSprite
 	{
 		if(AnimName.startsWith("sing"))
 		{
+			if(AnimName.startsWith("singLEFT"))
+			{
+				curFunnyPosition = [-10, 0];
+			}
+			else if(AnimName.startsWith("singDOWN"))
+			{
+				curFunnyPosition = [0, 10];
+			}
+			else if(AnimName.startsWith("singUP"))
+			{
+				curFunnyPosition = [0, -10];
+			}
+			else if(AnimName.startsWith("singRIGHT"))
+			{
+				curFunnyPosition = [10, 0];
+			}
+			else
+			{
+				curFunnyPosition = [0, 0];
+			}
+		}
+		else
+		{
+			if(AnimName == "glance" || AnimName == "melt")
+			{
+				curFunnyPosition = [-10, 0];
+			}
+			else
+			{
+				curFunnyPosition = [0, 0];
+			}
+		}
+
+		if(AnimName.startsWith("sing"))
+		{
 			if(!canSing)
 			{
+				curFunnyPosition = [0, 0];
 				return;
 			}
 		}
