@@ -3079,15 +3079,15 @@ class PlayState extends MusicBeatState
 		{
 			if(curBeat % (cuicaBopSpace * 2) == 0)
 			{
-				FlxG.camera.angle = 2.5;
-				camHUD.angle = 1;
-				FlxG.camera.zoom += 0.005;
+				FlxG.camera.angle = 1.5;
+				camGame.zoom += 0.05;
+				camHUD.zoom += 0.005;
 			}
 			else if(curBeat % (cuicaBopSpace) == 0)
 			{
-				FlxG.camera.angle = -2.5;
-				camHUD.angle = -1;
-				FlxG.camera.zoom += 0.005;
+				FlxG.camera.angle = -1.5;
+				camGame.zoom += 0.05;
+				camHUD.zoom += 0.005;
 			}
 		}
 
@@ -3137,6 +3137,8 @@ class PlayState extends MusicBeatState
 			case 439:
 				dad.playAnim("melt", true);
 			case 440:
+				camZoomingMult = 1.15;
+				fastBeatCam = true;
 				FlxG.camera.flash();
 				//PRI PART
 				dad.canDance = true;
@@ -3146,7 +3148,69 @@ class PlayState extends MusicBeatState
 				dad = new Character(dad.x, dad.y, 'principal', false);
 				dadGroup.add(dad);
 				iconP2.changeIcon(dad.healthIcon);
-				reloadHealthBarColors();
+				FlxTween.tween(dad, {x: dad.x - 225, y: dad.y + 100}, 1, {ease: FlxEase.circOut});
+				FlxTween.tween(boyfriend, {x: boyfriend.x + 180, y: boyfriend.y + 15}, 1, {ease: FlxEase.circOut});
+			case 448 | 464:
+				defaultCamZoom += 0.1;
+			case 456 | 472:
+				defaultCamZoom -= 0.1;
+			case 502:
+				defaultCamZoom += 0.2;
+			case 504:
+				FlxG.camera.flash();
+				defaultCamZoom -= 0.25;
+				fastBeatCam = false;
+				camZoomingMult = 1;
+			case 536:
+				defaultCamZoom += 0.05;
+			case 568:
+				camZoomingMult = 1.15;
+				fastBeatCam = true;
+				FlxG.camera.flash();
+			case 600 | 680:
+				FlxG.camera.flash();
+				defaultCamZoom += 0.1;
+			case 608 | 624 | 688 | 704:
+				defaultCamZoom -= 0.05;
+			case 616 | 696:
+				defaultCamZoom += 0.05;
+			case 632:
+				defaultCamZoom -= 0.05;
+				FlxG.camera.flash();
+				fastBeatCam = false;
+				camZoomingMult = 0;
+			case 636 | 640:
+				FlxG.camera.flash();
+				defaultCamZoom += 0.1;
+			case 644:
+				defaultCamZoom -= 0.1;
+				dad.canDance = false;
+				dad.canSing = false;
+				dad.playAnim("laugh", true);
+			case 648:
+				defaultCamZoom -= 0.1;
+				dad.canDance = true;
+				dad.canSing = true;
+				FlxG.camera.flash();
+				camZoomingMult = 1.15;
+				fastBeatCam = true;
+			case 712:
+				defaultCamZoom -= 0.15;
+				FlxG.camera.flash();
+			case 776:
+				defaultCamZoom += 0.1;
+				FlxG.camera.flash();
+				fastBeatCam = false;
+				camZoomingMult = 1;
+		}
+
+		if(fastBeatCam)
+		{
+			if (camZooming && FlxG.camera.zoom < 1.5 && ClientPrefs.data.camZooms)
+			{
+				FlxG.camera.zoom += 0.015 * camZoomingMult;
+				camHUD.zoom += 0.03 * camZoomingMult;
+			}
 		}
 
 		super.beatHit();
@@ -3155,6 +3219,8 @@ class PlayState extends MusicBeatState
 		setOnScripts('curBeat', curBeat);
 		callOnScripts('onBeatHit');
 	}
+
+	public var fastBeatCam:Bool = false;
 
 	override function sectionHit()
 	{

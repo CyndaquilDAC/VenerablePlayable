@@ -17,7 +17,7 @@ class HealthBar extends FlxSpriteGroup
 	// you might need to change this if you want to use a custom bar
 	public var barWidth(default, set):Int = 1;
 	public var barHeight(default, set):Int = 1;
-	public var barOffset:FlxPoint = new FlxPoint(3, 3);
+	public var barOffset:FlxPoint = new FlxPoint(2.5, 2.5);
 
 	public function new(x:Float, y:Float, image:String = 'healthBar', valueFunction:Void->Float = null, boundX:Float = 0, boundY:Float = 1)
 	{
@@ -27,17 +27,14 @@ class HealthBar extends FlxSpriteGroup
 		setBounds(boundX, boundY);
 		
 		bg = new FlxSprite().loadGraphic(Paths.image(image));
-		bg.antialiasing = ClientPrefs.data.antialiasing;
-		barWidth = Std.int(bg.width - 6);
-		barHeight = Std.int(bg.height - 6);
+		barWidth = Std.int(bg.width - 2.5);
+		barHeight = Std.int(bg.height - 2.5);
 
 		leftBar = new FlxSprite().makeGraphic(Std.int(bg.width), Std.int(bg.height), FlxColor.WHITE);
 		//leftBar.color = FlxColor.WHITE;
-		leftBar.antialiasing = antialiasing = ClientPrefs.data.antialiasing;
 
 		rightBar = new FlxSprite().makeGraphic(Std.int(bg.width), Std.int(bg.height), FlxColor.WHITE);
 		rightBar.color = FlxColor.BLACK;
-		rightBar.antialiasing = ClientPrefs.data.antialiasing;
 
 		add(leftBar);
 		add(rightBar);
@@ -59,8 +56,8 @@ class HealthBar extends FlxSpriteGroup
 
 	public function setColors(left:FlxColor, right:FlxColor)
 	{
-		leftBar.color = left;
-		rightBar.color = right;
+		leftBar.color = FlxColor.fromRGB(0, 0, 255);
+		rightBar.color = FlxColor.fromRGB(255, 255, 255);
 	}
 
 	public function updateBar()

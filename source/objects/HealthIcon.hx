@@ -21,7 +21,7 @@ class HealthIcon extends FlxSprite
 		super.update(elapsed);
 
 		if (sprTracker != null)
-			setPosition(sprTracker.x + sprTracker.width + 12, sprTracker.y - 30);
+			setPosition(sprTracker.x -5, sprTracker.y);
 	}
 
 	private var iconOffsets:Array<Float> = [0, 0];
@@ -33,8 +33,8 @@ class HealthIcon extends FlxSprite
 			
 			var graphic = Paths.image(name, allowGPU);
 			loadGraphic(graphic, true, Math.floor(graphic.width / 2), Math.floor(graphic.height));
-			iconOffsets[0] = (width - 150) / 2;
-			iconOffsets[1] = (height - 150) / 2;
+			iconOffsets[0] = (width - 75) / 2;
+			iconOffsets[1] = (height - 75) / 2;
 			updateHitbox();
 
 			animation.add(char, [0, 1], 0, false, isPlayer);
@@ -51,8 +51,8 @@ class HealthIcon extends FlxSprite
 	override function updateHitbox()
 	{
 		super.updateHitbox();
-		offset.x = iconOffsets[0];
-		offset.y = iconOffsets[1];
+		/*offset.x = iconOffsets[0];
+		offset.y = iconOffsets[1];*/
 	}
 
 	public function getCharacter():String {
